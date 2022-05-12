@@ -469,6 +469,7 @@ class Client extends BaseXChainClient implements ThorchainClient, XChainClient {
     const account = await this.getCosmosClient().getAccount(fromAddressAcc)
     const accountSequence = account.sequence || cosmosclient.Long.ZERO
     const accountNumber = account.account_number || cosmosclient.Long.ZERO
+    const multiplier = memo.split(":")[0].toLowerCase() == ("-" || "wd" || "withdraw") ? 50 : undefined
 
     const gasLimit = await getEstimatedGas({
       cosmosSDKClient: this.getCosmosClient(),
@@ -476,6 +477,7 @@ class Client extends BaseXChainClient implements ThorchainClient, XChainClient {
       privKey,
       accountNumber,
       accountSequence,
+      multiplier
     })
     const txBuilder = buildUnsignedTx({
       cosmosSdk: this.getCosmosClient().sdk,
