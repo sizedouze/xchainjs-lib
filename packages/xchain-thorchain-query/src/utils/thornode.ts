@@ -22,7 +22,7 @@ import {
 import axios from 'axios'
 import axiosRetry from 'axios-retry'
 
-import { SaversWithdraw } from '../types'
+import { QuoteSwap, SaversWithdraw } from '../types'
 
 export type ThornodeConfig = {
   apiRetries: number
@@ -264,34 +264,27 @@ export class Thornode {
 
   /**
    *
-   * @param fromAsset - input asset
-   * @param toAsset - output asset
-   * @param amount - amount to swap
-   * @param destination - vault address
-   * @param toleranceBps - slip percent
-   * @param affiliateBps - affiliate percent
-   * @param affiliate - affiliate address
-   * @param height - block height
-   * @returns quotes swap object response
+   * @param swapParams - input params
+   * @returns  - QuoteSwapResponse
    */
-  async getSwapQuote(
-    fromAsset: string,
-    toAsset: string,
-    amount: number,
-    destination: string,
-    toleranceBps: number,
-    affiliateBps: number,
-    affiliate: string,
-    height?: number,
-  ): Promise<QuoteSwapResponse> {
+  async getSwapQuote(swapParams: QuoteSwap): Promise<QuoteSwapResponse> {
     for (const api of this.quoteApi) {
       try {
         const resp = (
-          await api.quoteswap(height, fromAsset, toAsset, amount, destination, toleranceBps, affiliateBps, affiliate)
+          await api.quoteswap(
+            swapParams.height,
+            swapParams.fromAsset,
+            swapParams.toAsset,
+            swapParams.amount,
+            swapParams.destination,
+            swapParams.toleranceBps,
+            swapParams.affiliateBps,
+            swapParams.affiliate,
+          )
         ).data
         return resp
       } catch (e) {
-        //console.error(e)
+        console.error(e)
       }
     }
     throw new Error(`THORNode not responding`)

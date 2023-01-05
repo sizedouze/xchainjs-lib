@@ -22,6 +22,16 @@ export type SwapEstimate = {
   canSwap: boolean
   errors: string[]
 }
+export type QuoteSwap = {
+  height?: number
+  fromAsset: string
+  toAsset: string
+  amount: number
+  destination: string
+  toleranceBps: number
+  affiliateBps: number
+  affiliate: string
+}
 
 export type PoolCache = {
   lastRefreshed: number
